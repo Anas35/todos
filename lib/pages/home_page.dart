@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todos/models/todo_type.dart';
 import 'package:todos/widgets/page_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,6 +41,27 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  final List<TodoType> todoTypes = const [
+    TodoType(
+      title: 'Personal',
+      tasks: 9,
+      icon: Icons.person,
+      color: Color(0xFFF54471),
+    ),
+    TodoType(
+      title: 'Work',
+      tasks: 12,
+      icon: Icons.work,
+      color: Color(0xFF4d55e1),
+    ),
+    TodoType(
+      title: 'Home',
+      tasks: 6,
+      icon: Icons.home,
+      color: Color(0xFF3dbc9c),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +77,10 @@ class _HomePageState extends State<HomePage> {
           leading: const Icon(Icons.menu),
           title: const Text('TODO'),
           actions: const [
-            Icon(Icons.search),
+            Padding(
+              padding: EdgeInsets.only(right: 12.0),
+              child: Icon(Icons.search),
+            ),
           ],
         ),
         body: Column(
@@ -63,22 +88,23 @@ class _HomePageState extends State<HomePage> {
           children: [
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.only(left: 28.0),
+                padding: const EdgeInsets.only(left: 32.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: const [
+                    SizedBox(height: 30),
                     CircleAvatar(
                       radius: 25,
                       backgroundColor: Colors.white,
                       child: FlutterLogo(),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     Text('Hello, Jane.', style: TextStyle(fontSize: 32)),
                     SizedBox(height: 10),
                     Text('Looks like feels good'),
                     Text('You have three task todays'),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Text('Today: September 12 2007'),
                   ],
                 ),
@@ -87,7 +113,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: PageView(
                 controller: PageController(
-                  viewportFraction: 0.75,
+                  viewportFraction: 0.8,
                 ),
                 padEnds: false,
                 onPageChanged: (int? index) {
@@ -95,11 +121,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor = colors[index ?? 0];
                   });
                 },
-                children: const [
-                  PageCard(color: Color(0xFFF54471)),
-                  PageCard(color: Color(0xFF4d55e1)),
-                  PageCard(color: Color(0xFF3dbc9c)),
-                ],
+                children: todoTypes.map((TodoType todoType) => PageCard(todoType: todoType)).toList(),
               ),
             ),
           ],

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:todos/models/todo_type.dart';
 import 'package:todos/pages/detail_page.dart';
+import 'package:todos/widgets/avatar.dart';
 
 class PageCard extends StatelessWidget {
+  final TodoType todoType;
 
-  final Color color;
-
-  const PageCard({Key? key, required this.color}) : super(key: key);
+  const PageCard({
+    Key? key,
+    required this.todoType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +18,9 @@ class PageCard extends StatelessWidget {
         if (details.delta.dy < 0) {
           Navigator.of(context).push(
             PageRouteBuilder(
-              transitionDuration: const Duration(seconds: 1),
-              pageBuilder: (_, __, ___) => const DetailPage()
+              transitionDuration: const Duration(milliseconds: 750),
+              reverseTransitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => DetailPage(todoType: todoType),
             ),
           );
         }
@@ -23,56 +28,60 @@ class PageCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24.0, 8.0, 16.0, 0.0),
         child: Hero(
-          tag: 'hero',
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            ),
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.person),
-                      ),
-                      Icon(
-                        Icons.more_vert,
-                        color: Colors.grey,
-                      ),
-                    ]),
-                const Spacer(),
-                const Text('9 Tasks', style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 5),
-                Text('Personal',
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.grey.shade800,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Flexible(
-                      child: LinearProgressIndicator(
-                        value: 0.83,
-                        backgroundColor: Colors.grey.withAlpha(50),
-                        valueColor: AlwaysStoppedAnimation<Color>(color),
-                      ),
+          tag: todoType.title,
+          child: Material(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomAvator(
+                          child: Icon(todoType.icon, color: todoType.color),
+                        ),
+                        const Icon(
+                          Icons.more_vert,
+                          color: Colors.grey,
+                        ),
+                      ]),
+                  const Spacer(),
+                  Text('${todoType.tasks} Tasks',
+                      style: const TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 5),
+                  Text(
+                    todoType.title,
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: Colors.grey.shade800,
+                      fontWeight: FontWeight.w400,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: Text("83%", style: TextStyle(fontSize: 10, color: Colors.black)),
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: LinearProgressIndicator(
+                          value: 0.83,
+                          backgroundColor: Colors.grey.withAlpha(50),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(todoType.color),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                        child: Text("83%",
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.black)),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -88,9 +88,9 @@ class _MyButtonState extends State<MyButton> {
               width: double.infinity,
               height: 58.0,
               child: ElevatedButton(
-                onPressed: () {
-                  focusNode.requestFocus();
+                onPressed: () {              
                   Navigator.of(context).pop(controller.text);
+                  focusNode.requestFocus();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
